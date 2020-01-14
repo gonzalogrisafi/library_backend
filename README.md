@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # REST API LIBRARY
 
 # About
@@ -420,6 +419,3 @@ API manages a library's list of members, books and loans
 >>>    }
 >>>}
 >>>```
-=======
-# library_backend
->>>>>>> 341754568b1beb89e74604b2703a0150df96568b
