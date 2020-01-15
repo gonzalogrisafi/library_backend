@@ -25,7 +25,7 @@ create table loans
     id           SMALLINT       NOT NULL AUTO_INCREMENT,
     userId       SMALLINT       NOT NULL,
     bookId       SMALLINT       NOT NULL,
-    expiracyDate INTEGER        NOT NULL,
+    expiracyDate BIGINT         NOT NULL,
     CONSTRAINT PK__loans__END           PRIMARY KEY(id),
     CONSTRAINT FK__loans__books__END    FOREIGN KEY(bookId) REFERENCES books(id),
     CONSTRAINT FK__loans__users__END    FOREIGN KEY(userId) REFERENCES users(id),
