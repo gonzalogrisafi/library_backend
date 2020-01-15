@@ -296,10 +296,10 @@ module.exports = {
     postLoan: async (req, res) => {
         console.log("- POST /loans/");
         if (!req.session.userId) {
-            res.status(404).json({
+            res.status(401).json({
                 error: {
                     code: 401,
-                    message: "You must be logge in to perform this action"
+                    message: "You must be logged in to perform this action"
                 }
             });
         } 
