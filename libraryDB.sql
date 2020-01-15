@@ -15,6 +15,7 @@ create table books
     title       VARCHAR(100)    NOT NULL,
     amount      SMALLINT        NOT NULL,
     author      varchar(100)    NULL,
+    cover       varchar(50000)    NULL,
     CONSTRAINT  PK__books__END  PRIMARY KEY (id),
     CONSTRAINT  CK__books__id__END  CHECK (id>0)
 );
