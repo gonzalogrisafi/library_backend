@@ -19,7 +19,7 @@ module.exports = app => {
     app.delete("/books/:id", (req, res) => handler.deleteBook(req, res));
     app.put("/books", (req, res) => handler.putBook(req, res));
 
-    app.get("/loans/", (req, res) => handler.getLoans(req, res));
+    app.get("/loans", (req, res) => handler.getLoans(req, res));
     app.get("/loans/:id", (req, res) => handler.getLoansUser(req, res));
     app.post("/loans", (req, res) => handler.postLoan(req, res));
     app.delete("/loans/:id", (req, res) => handler.deleteLoan(req, res));
