@@ -5,24 +5,36 @@ module.exports = {
     /////////////////////////////// USER LOGIN/LOGOUT/SIGNUP /////////////////////////////////////
     login: async (req, res) => {
         console.log(`-  POST /login/`);
-        let result = await query.findUser(req.body.email, req.body.password);
-        console.log(result);
-        if (result.length > 0) {
-            req.session.userId = result[0].id;
-            req.session.loggedIn = true;
-            console.log(req.session);
-            res.status(200).json({
-                code: 200,
-                userId: req.session.userId,
-                message: "Logged In"
-            })
+        console.log(req.session);
+        if (!req.session.loggedIn) {
+            let result = await query.findUser(req.body.email, req.body.password);
+            console.log(result);
+            if (result.length > 0) {
+                req.session.userId = result[0].id;
+                req.session.loggedIn = true;
+                req.session.rol = result[0].rol;
+                console.log(req.session);
+                res.status(200).json({
+                    code: 200,
+                    userId: req.session.userId,
+                    rol: req.session.rol,
+                    message: "Logged In"
+                })
+            } else {
+                res.status(400).json({
+                    error: {
+                        code: 400,
+                        message: "Bad Request"
+                    }
+                });
+            }
         } else {
             res.status(400).json({
                 error: {
                     code: 400,
                     message: "Bad Request"
                 }
-            })
+            });
         }
     },
 
@@ -132,55 +144,53 @@ module.exports = {
     },
 
     postBook: async (req, res) => {
-        if (validator.validateBook(req.body.title, req.body.quantity)) {
-            await query.postBook(req.body.title, req.body.quantity);
-            res.status(201).json({
-                code: 201,
-                message: "book added"
-            });
+        if (req.session.loggedIn && req.session.rol == 'admin') {
+            if (validator.validateBook(req.body.title, req.body.quantity)) {
+                await query.postBook(req.body.title, req.body.quantity);
+                res.status(201).json({
+                    code: 201,
+                    message: "book added"
+                });
+            }
+            else {
+                res.status(400).json({
+                    error: {
+                        code: 400,
+                        message: "wrong parameters"
+                    }
+                })
+            }
         }
         else {
-            res.status(400).json({
+            res.status(403).json({
                 error: {
-                    code: 400,
-                    message: "wrong parameters"
+                    code: 403,
+                    message: "You must be logged in and be an admin to perform this action"
                 }
-            })
+            });
         }
     },
 
     //deleteBook deletes a book via its id, if the book was deleted then the number of affected rows is 1
     deleteBook: async (req, res) => {
-        let result = await query.deleteBook(req.params.id);
-        if (result.affectedRows == 1) {
-            res.status(200).json({
-                code: 200,
-                message: "book deleted"
-            });
-        }
-        else if (result == -1) {
-            res.status(403).json(
-                {
-                    error: {
-                        code: 403,
-                        message: "cannot delete the book due to there are borrowed copies"
-                    }
-                })
-        }
-        else {
-            res.status(404).json({
-                error: {
-                    code: 404,
-                    message: "book not found"
-                }
-            });
-        }
-    },
-
-    putBook: async (req, res) => {
-        if (validator.validateBookUpdate(req.body.bookId, req.body.amount)) {
-            let book = await query.getBookId(req.body.bookId);
-            if (book.length == 0) {
+        if (req.session.loggedIn && req.session.rol == 'admin') {
+            let result = await query.deleteBook(req.params.id);
+            if (result.affectedRows == 1) {
+                res.status(200).json({
+                    code: 200,
+                    message: "Book deleted"
+                });
+            }
+            else if (result == -1) {
+                res.status(403).json(
+                    {
+                        error: {
+                            code: 403,
+                            message: "Cannot delete the book due to there are borrowed copies"
+                        }
+                    })
+            }
+            else {
                 res.status(404).json({
                     error: {
                         code: 404,
@@ -188,26 +198,58 @@ module.exports = {
                     }
                 });
             }
-            else if (await query.putBook(req.body.bookId, req.body.amount)) {
-                res.status(200).json({
-                    code: 200,
-                    message: `amount of copies of book with id: ${req.body.bookId} updated successfully`
-                });
+        }
+        else {
+            res.status(403).json({
+                error: {
+                    code: 403,
+                    message: "You must be logged in and be an admin to perform this action"
+                }
+            });
+        }
+    },
+
+    putBook: async (req, res) => {
+        if (req.session.loggedIn && req.session.rol == 'admin') {
+            if (validator.validateBookUpdate(req.body.bookId, req.body.amount)) {
+                let book = await query.getBookId(req.body.bookId);
+                if (book.length == 0) {
+                    res.status(404).json({
+                        error: {
+                            code: 404,
+                            message: "book not found"
+                        }
+                    });
+                }
+                else if (await query.putBook(req.body.bookId, req.body.amount)) {
+                    res.status(200).json({
+                        code: 200,
+                        message: `amount of copies of book with id: ${req.body.bookId} updated successfully`
+                    });
+                }
+                else {
+                    res.status(400).json({
+                        error: {
+                            code: 400,
+                            message: "wrong amount of books"
+                        }
+                    });
+                }
             }
             else {
                 res.status(400).json({
                     error: {
                         code: 400,
-                        message: "wrong amount of books"
+                        message: "wrong parameters"
                     }
                 });
             }
         }
         else {
-            res.status(400).json({
+            res.status(403).json({
                 error: {
-                    code: 400,
-                    message: "wrong parameters"
+                    code: 403,
+                    message: "You must be logged in and be an admin to perform this action"
                 }
             });
         }
@@ -302,7 +344,7 @@ module.exports = {
                     message: "You must be logged in to perform this action"
                 }
             });
-        } 
+        }
         else if (!validator.validateDays(req.body.days)) {
             res.status(400).json({
                 error: {
