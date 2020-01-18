@@ -144,15 +144,17 @@ module.exports = {
     },
 
     postBook: async (req, res) => {
+        console.log("- POST /Book/")
         if (req.session.loggedIn && req.session.rol == 'admin') {
-            if (validator.validateBook(req.body.title, req.body.quantity)) {
-                await query.postBook(req.body.title, req.body.quantity);
+            if (validator.validateBook(req.body.title, req.body.amount)) {
+                await query.postBook(req.body.title, req.body.author, req.body.amount, req.body.cover);
                 res.status(201).json({
                     code: 201,
                     message: "book added"
                 });
             }
             else {
+                console.log("PARAMETROS INCORRECTOS");
                 res.status(400).json({
                     error: {
                         code: 400,
@@ -337,6 +339,7 @@ module.exports = {
 
     postLoan: async (req, res) => {
         console.log("- POST /loans/");
+        console.log(req.body);
         if (!req.session.userId) {
             res.status(401).json({
                 error: {
@@ -371,63 +374,6 @@ module.exports = {
                 });
             }
         }
-
-        /* 
-        let user = await query.getUserId(req.body.userId);
-        if (user.length == 0) {
-            res.status(404).json({
-                error: {
-                    code: 404,
-                    message: "User not found"
-                }
-            });
-        }
-        else {
-        let book = await query.getBookId(req.body.bookId);
-        if (book.length == 0) {
-            res.status(404).json({
-                error: {
-                    code: 404,
-                    message: "book not found"
-                }
-            });
-        }
-        else if (book[0].availables == 0) {
-            res.status(400).json({
-                error: {
-                    code: 400,
-                    message: `there are no available copies of Book ${req.body.bookId} available for loan`
-                }
-            })
-        }
-
-        if (!validator.validateDays(req.body.days)) {
-            res.status(400).json({
-                error: {
-                    code: 400,
-                    message: "wrong number of days"
-                }
-            });
-        }
-        else {
-            let result = await query.postLoan(req.body.userId, req.body.bookId, req.body.days);
-            if (result) {
-                res.status(200).json({
-                    code: 200,
-                    message: `loan of book with id ${req.body.bookId} created successfully`
-                });
-                return;
-            }
-            else {
-                res.status(400).json({
-                    error: {
-                        code: 400,
-                        message: `User ${req.body.userId} has unreturned books`
-                    }
-                });
-            }
-        } 
-        */
     },
 
     deleteLoan: async (req, res) => {
