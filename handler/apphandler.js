@@ -163,10 +163,18 @@ module.exports = {
                 })
             }
         }
-        else {
+        else if (req.session.loggedIn && req.session.rol == 'user') {
             res.status(403).json({
                 error: {
                     code: 403,
+                    message: "You must be an admin to perform this action"
+                }
+            })
+        }
+        else {
+            res.status(401).json({
+                error: {
+                    code: 401,
                     message: "You must be logged in and be an admin to perform this action"
                 }
             });
@@ -175,36 +183,49 @@ module.exports = {
 
     //deleteBook deletes a book via its id, if the book was deleted then the number of affected rows is 1
     deleteBook: async (req, res) => {
+        console.log("- DELETE /book/:id")
+        console.log(req.params);
         if (req.session.loggedIn && req.session.rol == 'admin') {
+            const book = await query.getBookId(req.params.id);
+            console.log(book);
+            if (book.length == 0) {
+                console.log("book not found");
+                res.status(404).json({
+                    error: {
+                        code: 404,
+                        message: "Book not found"
+                    }
+                });
+            }
             let result = await query.deleteBook(req.params.id);
-            if (result.affectedRows == 1) {
+            if (result) {
                 res.status(200).json({
                     code: 200,
                     message: "Book deleted"
                 });
             }
-            else if (result == -1) {
-                res.status(403).json(
+            else if (!result){
+                res.status(400).json(
                     {
                         error: {
-                            code: 403,
+                            code: 400,
                             message: "Cannot delete the book due to there are borrowed copies"
                         }
                     })
             }
-            else {
-                res.status(404).json({
-                    error: {
-                        code: 404,
-                        message: "book not found"
-                    }
-                });
-            }
         }
-        else {
+        else if (req.session.loggedIn && req.session.rol == 'user') {
             res.status(403).json({
                 error: {
                     code: 403,
+                    message: "You must be an admin to perform this action"
+                }
+            })
+        }
+        else {
+            res.status(401).json({
+                error: {
+                    code: 401,
                     message: "You must be logged in and be an admin to perform this action"
                 }
             });
@@ -212,6 +233,8 @@ module.exports = {
     },
 
     putBook: async (req, res) => {
+        console.log("- PUT /books/");
+        console.log(req.body);
         if (req.session.loggedIn && req.session.rol == 'admin') {
             if (validator.validateBookUpdate(req.body.bookId, req.body.amount)) {
                 let book = await query.getBookId(req.body.bookId);
@@ -219,21 +242,21 @@ module.exports = {
                     res.status(404).json({
                         error: {
                             code: 404,
-                            message: "book not found"
+                            message: "Book not found"
                         }
                     });
                 }
                 else if (await query.putBook(req.body.bookId, req.body.amount)) {
                     res.status(200).json({
                         code: 200,
-                        message: `amount of copies of book with id: ${req.body.bookId} updated successfully`
+                        message: `Amount of copies of book with id: ${req.body.bookId} updated successfully`
                     });
                 }
                 else {
-                    res.status(400).json({
+                    res.status(404).json({
                         error: {
-                            code: 400,
-                            message: "wrong amount of books"
+                            code: 404,
+                            message: "Wrong amount of books"
                         }
                     });
                 }
@@ -242,15 +265,23 @@ module.exports = {
                 res.status(400).json({
                     error: {
                         code: 400,
-                        message: "wrong parameters"
+                        message: "Wrong parameters"
                     }
                 });
             }
         }
-        else {
+        else if (req.session.loggedIn && req.session.rol == 'user') {
             res.status(403).json({
                 error: {
                     code: 403,
+                    message: "You must be an admin to perform this action"
+                }
+            })
+        }
+        else {
+            res.status(401).json({
+                error: {
+                    code: 401,
                     message: "You must be logged in and be an admin to perform this action"
                 }
             });
@@ -318,29 +349,39 @@ module.exports = {
 
     getLoansUser: async (req, res) => {
         console.log(`- GET /loans/:id`);
-        let result = await query.getLoansUser(req.params.id);
-        console.log(result);
-        if (result) {
-            res.status(200).json({
-                code: 200,
-                data: result
-            });
+        if (req.session.loggedIn) {
+            let result = await query.getLoansUser(req.params.id);
+            console.log(result);
+            if (result) {
+                res.status(200).json({
+                    code: 200,
+                    data: result
+                });
+            }
+            else {
+                res.status(404).json(
+                    {
+                        error: {
+                            code: 404,
+                            message: "User not found"
+                        }
+                    })
+            }
         }
         else {
-            res.status(404).json(
-                {
-                    error: {
-                        code: 404,
-                        message: "User not found"
-                    }
-                })
+            res.status(401).json({
+                error: {
+                    code: 401,
+                    message: "You must be logged in to perform this action"
+                }
+            })
         }
     },
 
     postLoan: async (req, res) => {
         console.log("- POST /loans/");
         console.log(req.body);
-        if (!req.session.userId) {
+        if (!req.session.loggedIn) {
             res.status(401).json({
                 error: {
                     code: 401,
@@ -378,6 +419,14 @@ module.exports = {
 
     deleteLoan: async (req, res) => {
         console.log("- DELETE /loans/:id");
+        if (!req.session.loggedIn) {
+            res.status(401).json({
+                error: {
+                    code: 401,
+                    message: "You must be logged in to perform this action"
+                }
+            })
+        }
         let result = await query.deleteLoan(req.params.id);
         if (result.affectedRows == 1) {
             res.status(204).json({
