@@ -8,13 +8,13 @@ module.exports = app => {
     app.get("/signup/checkEmail/:email", (req,res)=> handler.checkEmail(req,res));
     app.get("/signup/checkUsername/:username", (req,res)=> handler.checkUsername(req,res));
 
-
     app.get("/users", (req, res) => handler.getUsers(req, res));
     app.get("/users/:id", (req, res) => handler.getUserId(req, res));
     app.post("/users", (req, res) => handler.postUser(req, res));
 
     app.get("/books", (req, res) => handler.getBooks(req, res));
     app.get("/books/:id", (req, res) => handler.getBookId(req, res));
+    app.get("/book/loans/:id", (req,res) => handler.getBookLoans (req,res));
     app.post("/books", (req, res) => handler.postBook(req, res));
     app.delete("/books/:id", (req, res) => handler.deleteBook(req, res));
     app.put("/books", (req, res) => handler.putBook(req, res));

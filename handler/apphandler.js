@@ -143,6 +143,17 @@ module.exports = {
         }
     },
 
+    getBookLoans: async (req,res) => {
+        console.log("- GET /book/loans/:id");
+        let loansBook = await query.getBookLoans(req.params.id);
+        res.status(200).json({
+            code: 200,
+            count: loansBook.length,
+            data: loansBook
+        });
+    },
+
+
     postBook: async (req, res) => {
         console.log("- POST /Book/")
         if (req.session.loggedIn && req.session.rol == 'admin') {
