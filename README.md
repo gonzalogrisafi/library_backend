@@ -61,7 +61,8 @@ Error messages are returned in JSON format. For example, an error might look lik
         - [DELETE Loan](#DELETE-loansid)  
 
 # Books
- ## **Get** /books
+
+## **Get** /books
 ```css
 localhost:8080/books
 ```
@@ -96,14 +97,10 @@ Gets the book's info by its id
 
 ||Type|Description |
 |:----:|------|------|
-| id |integer| Unique identifier for the object |
+| `id` |integer| Unique identifier for the object |
 
-```css
-id               id of the book to be searched
-```
-
- ### **Example Response**
-- **200 OK** 
+* ### **Example Response**
+* #### `200 OK`
 ```json
 {
     "code":200,
@@ -114,7 +111,7 @@ id               id of the book to be searched
     }
 }
 ```
-- **404 NOT FOUND** 
+* #### `404 NOT FOUND`
 ```json
 {
     "error": {
@@ -123,8 +120,7 @@ id               id of the book to be searched
     }
 }
 ```
-
-### **POST */books/***
+## `POST` /books/{id}
 ```css
 localhost:8080/books
 ```
