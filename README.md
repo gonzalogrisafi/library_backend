@@ -95,7 +95,7 @@ Gets the book's info by its id
 * ### **Parameters**
 
 ||Type|Description |
-|---|---|---|
+|:----:|------|------|
 | id |integer| Unique identifier for the object |
 
 ```css
