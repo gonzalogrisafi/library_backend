@@ -93,13 +93,10 @@ localhost:8080/books/:id
 Gets the book's info by its id
  
 * ### **Parameters**
-<center>
 
 ||Type|Description |
-|--|--|--|
+|---|---|---|
 | id |integer| Unique identifier for the object |
-
-</center>
 
 ```css
 id               id of the book to be searched
