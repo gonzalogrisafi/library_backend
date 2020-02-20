@@ -3,7 +3,24 @@
 REST API that manages a library, it includes books, members and loans management
 
 # Overview
-The API was made with Node.js and Express.js, to manage client's sessions it uses express-session and MySQL for session storage.
+The API was made with Node.js and Express.js, to manage client's sessions it uses express-session and MySQL as session storage.
+
+# Installation
+## Requirements
+* npm
+* node >= 8
+* MySQL ~5.7
+
+```
+ git clone https://github.com/gonzagrisa/library_backend
+ cd api-js-mooc
+ npm install
+```
+
+## Run application
+```
+node index.js
+```
 
 # Response Status Codes
 |Code|Description |
@@ -33,22 +50,24 @@ Error messages are returned in JSON format. For example, an error might look lik
         - [POST Book](#POST-books)  
         - [DELETE Book](#DELETE-book)  
         - [PUT Book](#PUT-booksid)
-- [Members](#GET-Members)  
-        - [GET Members](#GET-Members)  
-        - [GET Member by ID](#GET-membersid)  
-        - [POST Member](#POST-members)   
+- [Users](#GET-users)  
+        - [GET users](#GET-users)  
+        - [GET Member by ID](#GET-usersid)  
+        - [POST Member](#POST-users)   
 - [Loans](#GET-loans)  
         - [GET Loans](#GET-loans)  
         - [GET Loan by Member ID](#GET-loansid)  
         - [POST Loan](#POST-loans)  
         - [DELETE Loan](#DELETE-loansid)  
 
- ### **Get */books/***
-Obtain all the books
+# Books
+ ## **Get** /books
 ```css
 localhost:8080/books
 ```
-- #### **Example Response**
+Get the list of books in database
+
+- ### **Example Response**
 ```json
 {
     "code":200,
@@ -67,14 +86,25 @@ localhost:8080/books
 }
 ```
 
-### **GET */books/:id***
+## **GET** /books/{id}
 ```css
 localhost:8080/books/:id
 ```
-- **Path Variables:**
+Gets the book's info by its id
+ 
+* ### **Parameters**
+<center>
+
+||Type|Description |
+|--|--|--|
+| id |integer| Unique identifier for the object |
+
+</center>
+
 ```css
-id:        id of the book to be searched
+id               id of the book to be searched
 ```
+
  ### **Example Response**
 - **200 OK** 
 ```json
@@ -221,10 +251,10 @@ id: ID of the book to update amount of copies
 }
 ```
 
-## **GET */members/***
-Obtain all the library's members
+## **GET */users/***
+Obtain all the library's users
 ```css
-localhost:8080/members
+localhost:8080/users
 ```
 ### **Example Response**
 ```json
@@ -243,9 +273,9 @@ localhost:8080/members
 }
 ```
 
-## **GET */members/:id***
+## **GET */users/:id***
 ```css
-localhost:8080/members/:id
+localhost:8080/users/:id
 ```
 **Path Variables:**
 ```css
@@ -272,9 +302,9 @@ id: id of the member to search
 }
 ```
 
-## **POST */members/***
+## **POST */users/***
 ```css
-localhost:8080/members
+localhost:8080/users
 ```
 #### Body
 ```json
