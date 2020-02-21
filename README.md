@@ -62,13 +62,14 @@ Error messages are returned in JSON format. For example, an error might look lik
 
 # Books
 
-## **Get** /books
+## `Get` /books
+
 ```css
 localhost:8080/books
 ```
 Get the list of books in database
 
-- ### **Example Response**
+### **Example Response**
 ```json
 {
     "code":200,
@@ -87,7 +88,7 @@ Get the list of books in database
 }
 ```
 
-## **GET** /books/{id}
+## `GET` /books/{id}
 ```css
 localhost:8080/books/:id
 ```
@@ -99,7 +100,7 @@ Gets the book's info by its id
 |:----:|------|------|
 | `id` |integer| Unique identifier for the object |
 
-* ### **Example Response**
+### **Example Response**
 * #### `200 OK`
 ```json
 {
@@ -116,15 +117,16 @@ Gets the book's info by its id
 {
     "error": {
         "code": 404,
-        "message": "book not found"
+        "message": "Book not found"
     }
 }
 ```
-## `POST` /books/{id}
+## `POST` /books
 ```css
 localhost:8080/books
 ```
-- #### Body
+Save a new book in the database
+### **Request Body**
 ```json
 {
 	"title":"Don Quijote",
@@ -132,123 +134,158 @@ localhost:8080/books
 }
 ```
 ### **Example Response**
-- **200 OK**
+- #### `200 OK`
 ```json
 {
     "code":201,
     "message": "Book Added"
 }
 ```
-- **400 BAD REQUEST**
+- #### `400 BAD REQUEST`
 ```json
 {
     "error": {
         "code": 400,
-        "message": "wrong parameters"
+        "message": "Wrong parameters"
     }
 }
 ```
-- **400 BAD REQUEST**
+- #### `401 UNAUTHORIZED`
 ```json
 {
     "error": {
-        "code": 400,
-        "message": "there's already another book with that id"
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
     }
 }
 ```
-
-## **DELETE */book/***
-```css
-localhost:8080/books/:id
-```
-#### Path Variables
-```css
-id: ID of the book to be deleted
-```
-### **Example Response**
-- **Case 200 OK**
-```json
-{
-    "code":200,
-    "message": "book deleted"
-}
-```
-- **404 NOT FOUND**
-```json
-{
-    "error": {
-        "code": 404,
-        "message": "book not found"
-    }
-}
-```
-- **Case 403 FORBIDDEN**
+- #### `403 FORBIDDEN`
 ```json
 {
     "error": {
         "code": 403,
-        "message": "cannot delete the book due to there are borrowed copies"
+        "message": "You must be an admin to perform this action"
     }
 }
 ```
 
-## **PUT */books/:id***
+## `DELETE` /books/{id}
 ```css
-localhost:8080/libros/:idLibro
+localhost:8080/books/:id
 ```
-#### Path Variables
-```css
-id: ID of the book to update amount of copies
-```
-#### Body
+Delete a Book from database by its id
+
+* ### **Parameters**
+
+||Type|Description |
+|:----:|------|------|
+| `id` |integer| Book's unique identifier|
+
+### **Example Response**
+- #### `200 OK`
 ```json
 {
-	"bookId":100,
-	"amount":20
+    "code":200,
+    "message": "Book deleted"
+}
+```
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Cannot delete the book due to there are borrowed copies"
+    }
+}
+```
+- #### `404 NOT FOUND`
+```json
+{
+    "error": {
+        "code": 404,
+        "message": "Book not found"
+    }
+}
+```
+- #### `401 UNAUTHORIZED`
+```json
+{
+    "error": {
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
+    }
+}
+```
+
+- #### `403 FORBIDDEN`
+```json
+{
+    "error": {
+        "code": 403,
+        "message": "You must be an admin to perform this action"
+    }
+}
+```
+## `PUT` /books/{id}
+```css
+localhost:8080/books/{id}
+```
+Update a book's amount of copies by its id
+* ### **Parameters**
+||Type|Description |
+|:----:|------|------|
+| `id` |integer| Book's unique identifier|
+
+### **Request Body**
+```json
+{
+	"bookId":2,
+	"amount":100
 }
 ```
 ### **Example Response**
-- **Case 200 OK**
+- #### `200 OK`
 ```json
 {
     "code":200,
     "message": "amount of copies of book with id: {id} updated successfully"
 }
 ```
-- **Case 404 NOT FOUND**
+* #### `404 NOT FOUND`
 ```json
 {
     "error": {
         "code": 404,
-        "message": "book not found"
+        "message": "Book not found"
     }
 }
 ```
-- **Case 403 FORBIDDEN**
+- #### `403 FORBIDDEN`
 ```json
 {
     "error": {
         "code": 403,
-        "message": "wrong amount of books"
-    }
-}
-```
-- **Case 400 BAD REQUEST**
-```json
-{
-    "error": {
-        "code": 400,
-        "message": "wrong parameters"
+        "message": "You must be an admin to perform this action"
     }
 }
 ```
 
-## **GET */users/***
-Obtain all the library's users
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Wrong parameters"
+    }
+}
+```
+
+## `GET` /users
 ```css
 localhost:8080/users
 ```
+Obtain a list of the library's users
+
 ### **Example Response**
 ```json
 {
@@ -266,16 +303,19 @@ localhost:8080/users
 }
 ```
 
-## **GET */users/:id***
+## `GET` /users/{id}
 ```css
 localhost:8080/users/:id
 ```
-**Path Variables:**
-```css
-id: id of the member to search
-```
+Get a user's info by its id
+
+* ### **Parameters**
+||Type|Description |
+|:----:|------|------|
+| `id` |integer| User's unique identifier|
+
 ### **Example Response**
-- **Case 200 OK**
+- #### `200 OK`
 ```json
 {
     "code":200,
@@ -285,36 +325,169 @@ id: id of the member to search
     }
 }
 ```
-- **Case 404 NOT FOUND**
+
+- #### `400 BAD REQUEST`
 ```json
 {
     "error": {
-        "code": 404,
-        "message": "Member not found"
+        "code": 400,
+        "message": "Couldn't Log Out"
     }
 }
 ```
 
-## **POST */users/***
+## `POST` /signup
 ```css
-localhost:8080/users
+localhost:8080/signup
 ```
-#### Body
+Create a new user in the database with rol: "USER"
+### **Request Body**
 ```json
 {
-	"id":3,
-	"name":"member 3"
+	"email":"abc@gmail.com",
+	"username":"abc",
+	"password":"secret"
 }
 ```
 ### **Example Response**
 ```json
 {
     "code":200,
-    "message": "Member created successfully"
+    "message": "User Created Successfully"
 }
 ```
 
-## **GET */loans/***
+## `POST` /login
+```css
+localhost:8080/login
+```
+Create a session
+
+### **Request Body**
+```json
+{
+	"email": "max@gmail.com",
+    "password": "secret"
+}
+```
+
+### **Example Response**
+- #### `200 OK`
+```json
+{
+    "code": 200,
+    "userId": 2,
+    "rol": "ADMIN",
+    "message": "Logged In"
+}
+```
+
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Incorrect User or Password"
+    }
+}
+```
+
+## `POST` /logout
+```css
+localhost:8080/logout
+```
+Delete a user's session
+
+### **Example Response**
+- #### `200 OK`
+```json
+{
+    "code":200,
+    "message": "Logged Out"
+}
+```
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Couldn't Log Out"
+    }
+}
+```
+- #### `500 INTERNAL SERVER ERROR`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Error destroying session"
+    }
+}
+```
+
+## `GET` /signup/checkEmail/ {email}
+```css
+localhost:8080/signup/checkEmail/{email}
+```
+Checks if an email is already in database
+
+* ### **Parameters**
+||Type|Description |
+|:----:|------|------|
+| `email` |string| Email to check if it's available |
+
+### **Example Response**
+- #### `200 OK`
+```json
+{
+    "code":200,
+    "message": "Email available"
+}
+```
+
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Email already in use"
+    }
+}
+```
+
+
+## `GET` /signup/checkUsername/ {username}
+```css
+localhost:8080/signup/checkUsername/{username}
+```
+Checks if a username is already in database
+
+* ### **Parameters**
+||Type|Description |
+|:----:|------|------|
+| `username` |string| Username to check if it's available |
+
+### **Example Response**
+- #### `200 OK`
+```json
+{
+    "code":200,
+    "message": "Username available"
+}
+```
+
+- #### `400 BAD REQUEST`
+```json
+{
+    "error": {
+        "code": 400,
+        "message": "Username already in use"
+    }
+}
+```
+
+
+## `GET` /loans
 ```css
 localhost:8080/loans
 ```
@@ -384,7 +557,7 @@ localhost:8080/loans
 }
 ```
 ### **Example Response**
-- **Case 200 OK**
+- #### `200 OK`
 ```json
 {
     "code":200,
@@ -446,14 +619,14 @@ localhost:8080/loans/:id
 id: loan id to be deleted
 ```
 ### **Example Response**
-- **Case 200 OK**
+- #### `200 OK`
 ```json
 {
     "code":200,
     "message": "loan deleted successfully"
 }
 ```
-- **Case 404 NOT FOUND**
+* #### `404 NOT FOUND`
 ```json
 {
     "error": {
