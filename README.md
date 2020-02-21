@@ -44,21 +44,25 @@ Error messages are returned in JSON format. For example, an error might look lik
 ```
 
 # Endpoints
-- [Books](#GET-Books)  
-        - [GET Books](#Get-books)  
-        - [GET Book by ID](#GET-booksid)  
-        - [POST Book](#POST-books)  
-        - [DELETE Book](#DELETE-book)  
-        - [PUT Book](#PUT-booksid)
-- [Users](#GET-users)  
-        - [GET users](#GET-users)  
-        - [GET Member by ID](#GET-usersid)  
-        - [POST Member](#POST-users)   
-- [Loans](#GET-loans)  
-        - [GET Loans](#GET-loans)  
-        - [GET Loan by Member ID](#GET-loansid)  
-        - [POST Loan](#POST-loans)  
-        - [DELETE Loan](#DELETE-loansid)  
+## Books   
+- [Get all Books](#Get-books)  
+- [Get Book by ID](#GET-booksid)  
+- [Create Book](#POST-books)  
+- [Delete Book](#DELETE-book)  
+- [Update Book](#PUT-booksid)
+## Users  
+- [Get Users](#GET-users)  
+- [Get User by ID](#GET-usersid)  
+- [Signup](#POST-signup)  
+- [Login](#POST-login)  
+- [Logout](#POST-logout)  
+- [Check Email](#GET-signupcheckEmail-email)  
+- [Check Username](#GET-signupcheckUsername-username)
+## Loans
+- [Get Loans](#GET-loans)  
+- [Get Loan by User ID](#GET-loansid)  
+- [Create Loan](#POST-loans)  
+- [Delete Loan](#DELETE-loansid)  
 
 # Books
 
@@ -366,7 +370,7 @@ Create a session
 ### **Request Body**
 ```json
 {
-	"email": "max@gmail.com",
+    "email": "max@gmail.com",
     "password": "secret"
 }
 ```
@@ -491,7 +495,11 @@ Checks if a username is already in database
 ```css
 localhost:8080/loans
 ```
+Get a list of all the currently active loans made
+
 ### **Example Response**
+
+- #### `200 OK`
 ```json
 {
     "code":200,
@@ -512,17 +520,36 @@ localhost:8080/loans
 }
 ```
 
-## **GET */loans/:id***
-Obtains all the loans made by a member via his id
+- #### `401 UNAUTHORIZED`
+```json
+{
+    "error": {
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
+    }
+}
+```
+- #### `403 FORBIDDEN`
+```json
+{
+    "error": {
+        "code": 403,
+        "message": "You must be an admin to perform this action"
+    }
+}
+```
+
+## `GET` /loans/{id}
 ```css
 localhost:8080/loans/:id
 ```
+Obtains all the loans made by a member by his id
 **Path Variables:**
 ```css
 id: member's id to search all the loans made by him
 ```
 ### **Example Response**
-- ***Case* 200 OK**
+- #### `200 OK`
 ```json
 {
     "code":200,
@@ -534,96 +561,104 @@ id: member's id to search all the loans made by him
     ]
 }
 ```
-- ***Case* 404 NOT FOUND**
+- #### `400 BAD REQUEST`
 ```json
 {
     "error": {
         "code": 404,
-        "message": "Member not found"
+        "message": "User not found"
     }
 }
 ```
 
-## **POST */loans/***
+- #### `401 UNAUTHORIZED`
+```json
+{
+    "error": {
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
+    }
+}
+```
+- #### `403 FORBIDDEN`
+```json
+{
+    "error": {
+        "code": 403,
+        "message": "You must be an admin to perform this action"
+    }
+}
+```
+
+## `POST` /loans/
 ```css
 localhost:8080/loans
 ```
-### **Body**
+Creates a new loan in the database
+
+### **Request Body**
 ```json
 {
 	"memberId":1,
-	"bookId":10,
-	"days":5
+	"bookId":1,
+	"days":1
 }
 ```
+
 ### **Example Response**
 - #### `200 OK`
 ```json
 {
     "code":200,
-    "message": "loan of book with id {id} created successfully"
+    "message": "Loan of book with id {id} created successfully"
 }
 ```
-- **Case Member has Unreturned Books**
+
+- #### `400 BAD REQUEST`
 ```json
 {
     "error": {
         "code": 400,
-        "message": "member {id} has unreturned books"
+        "message": "User 1 has unreturned books"
     }
 }
 ```
-- **Case Wrong Days**
 ```json
 {
     "error": {
         "code": 400,
-        "message": "wrong number of days"
+        "message": "Wrong Number of Days"
     }
 }
 ```
-- **Case No Available Copies**
+- #### `401 UNAUTHORIZED`
 ```json
 {
     "error": {
-        "code": 400,
-        "message": "there are no available copies of Book {id} available for loan"
-    }
-}
-```
-- **Case 404 Member NOT FOUND**
-```json
-{
-    "error": {
-        "code": 404,
-        "message": "member not found"
-    }
-}
-```
-- **Case 404 Book NOT FOUND**
-```json
-{
-    "error": {
-        "code": 404,
-        "message": "book not found"
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
     }
 }
 ```
 
-## **DELETE */loans/:id***
+## `DELETE` /loans/{id}
 ```css
-localhost:8080/loans/:id
+localhost:8080/loans/{id}
 ```
-### **Path Variables**
-```css
-id: loan id to be deleted
-```
+Deletes a loan from database
+
+* ### **Parameters**
+
+||Type|Description |
+|:----:|------|------|
+| `id` |integer| Book's unique identifier |
+
 ### **Example Response**
 - #### `200 OK`
 ```json
 {
     "code":200,
-    "message": "loan deleted successfully"
+    "message": "Loan deleted successfully"
 }
 ```
 * #### `404 NOT FOUND`
@@ -632,6 +667,15 @@ id: loan id to be deleted
     "error": {
         "code": 404,
         "message": "loan not found"
+    }
+}
+```
+- #### `401 UNAUTHORIZED`
+```json
+{
+    "error": {
+        "code": 401,
+        "message": "You must be logged in and be an admin to perform this action"
     }
 }
 ```
