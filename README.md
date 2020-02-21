@@ -44,13 +44,13 @@ Error messages are returned in JSON format. For example, an error might look lik
 ```
 
 # Endpoints
-## Books   
+### Books   
 - [Get all Books](#Get-books)  
 - [Get Book by ID](#GET-booksid)  
 - [Create Book](#POST-books)  
 - [Delete Book](#DELETE-book)  
 - [Update Book](#PUT-booksid)
-## Users  
+### Users  
 - [Get Users](#GET-users)  
 - [Get User by ID](#GET-usersid)  
 - [Signup](#POST-signup)  
@@ -58,7 +58,7 @@ Error messages are returned in JSON format. For example, an error might look lik
 - [Logout](#POST-logout)  
 - [Check Email](#GET-signupcheckEmail-email)  
 - [Check Username](#GET-signupcheckUsername-username)
-## Loans
+### Loans
 - [Get Loans](#GET-loans)  
 - [Get Loan by User ID](#GET-loansid)  
 - [Create Loan](#POST-loans)  
