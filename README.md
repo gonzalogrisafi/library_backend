@@ -69,7 +69,7 @@ Error messages are returned in JSON format. For example, an error might look lik
 ## `Get` /books
 
 ```css
-localhost:8080/books
+localhost:8000/books
 ```
 Get the list of books in database
 
@@ -94,7 +94,7 @@ Get the list of books in database
 
 ## `GET` /books/{id}
 ```css
-localhost:8080/books/:id
+localhost:8000/books/:id
 ```
 Gets the book's info by its id
  
@@ -127,7 +127,7 @@ Gets the book's info by its id
 ```
 ## `POST` /books
 ```css
-localhost:8080/books
+localhost:8000/books
 ```
 Save a new book in the database
 ### **Request Body**
@@ -175,7 +175,7 @@ Save a new book in the database
 
 ## `DELETE` /books/{id}
 ```css
-localhost:8080/books/:id
+localhost:8000/books/:id
 ```
 Delete a Book from database by its id
 
@@ -232,7 +232,7 @@ Delete a Book from database by its id
 ```
 ## `PUT` /books/{id}
 ```css
-localhost:8080/books/{id}
+localhost:8000/books/{id}
 ```
 Update a book's amount of copies by its id
 * ### **Parameters**
@@ -286,7 +286,7 @@ Update a book's amount of copies by its id
 
 ## `GET` /users
 ```css
-localhost:8080/users
+localhost:8000/users
 ```
 Obtain a list of the library's users
 
@@ -309,7 +309,7 @@ Obtain a list of the library's users
 
 ## `GET` /users/{id}
 ```css
-localhost:8080/users/:id
+localhost:8000/users/:id
 ```
 Get a user's info by its id
 
@@ -342,7 +342,7 @@ Get a user's info by its id
 
 ## `POST` /signup
 ```css
-localhost:8080/signup
+localhost:8000/signup
 ```
 Create a new user in the database with rol: "USER"
 ### **Request Body**
@@ -363,7 +363,7 @@ Create a new user in the database with rol: "USER"
 
 ## `POST` /login
 ```css
-localhost:8080/login
+localhost:8000/login
 ```
 Create a session
 
@@ -398,7 +398,7 @@ Create a session
 
 ## `POST` /logout
 ```css
-localhost:8080/logout
+localhost:8000/logout
 ```
 Delete a user's session
 
@@ -431,7 +431,7 @@ Delete a user's session
 
 ## `GET` /signup/checkEmail/ {email}
 ```css
-localhost:8080/signup/checkEmail/{email}
+localhost:8000/signup/checkEmail/{email}
 ```
 Checks if an email is already in database
 
@@ -462,7 +462,7 @@ Checks if an email is already in database
 
 ## `GET` /signup/checkUsername/ {username}
 ```css
-localhost:8080/signup/checkUsername/{username}
+localhost:8000/signup/checkUsername/{username}
 ```
 Checks if a username is already in database
 
@@ -493,7 +493,7 @@ Checks if a username is already in database
 
 ## `GET` /loans
 ```css
-localhost:8080/loans
+localhost:8000/loans
 ```
 Get a list of all the currently active loans made
 
@@ -541,7 +541,7 @@ Get a list of all the currently active loans made
 
 ## `GET` /loans/{id}
 ```css
-localhost:8080/loans/:id
+localhost:8000/loans/:id
 ```
 Obtains all the loans made by a member by his id
 **Path Variables:**
@@ -592,7 +592,7 @@ id: member's id to search all the loans made by him
 
 ## `POST` /loans/
 ```css
-localhost:8080/loans
+localhost:8000/loans
 ```
 Creates a new loan in the database
 
@@ -643,7 +643,7 @@ Creates a new loan in the database
 
 ## `DELETE` /loans/{id}
 ```css
-localhost:8080/loans/{id}
+localhost:8000/loans/{id}
 ```
 Deletes a loan from database
 

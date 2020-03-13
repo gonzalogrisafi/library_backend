@@ -143,7 +143,7 @@ module.exports = {
         }
     },
 
-    getBookLoans: async (req,res) => {
+    getBookLoans: async (req, res) => {
         console.log("- GET /book/loans/:id");
         let loansBook = await query.getBookLoans(req.params.id);
         res.status(200).json({
@@ -215,7 +215,7 @@ module.exports = {
                     message: "Book deleted"
                 });
             }
-            else if (!result){
+            else if (!result) {
                 res.status(400).json(
                     {
                         error: {
