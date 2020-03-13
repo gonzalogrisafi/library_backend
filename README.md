@@ -13,7 +13,7 @@ The API was made with Node.js and Express.js, to manage client's sessions it use
 
 ```
  git clone https://github.com/gonzagrisa/library_backend
- cd api-js-mooc
+ cd library_backend
  npm install
 ```
 
