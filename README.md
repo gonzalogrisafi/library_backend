@@ -2,9 +2,6 @@
 
 REST API that manages a library, it includes books, members and loans management
 
-# Overview
-The API was made with Node.js and Express.js, to manage client's sessions it uses express-session and MySQL as session storage.
-
 # Installation
 ## Requirements
 * npm
